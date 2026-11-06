@@ -1,0 +1,42 @@
+/* Design tokens. Never hardcode colors in components; use these variables. */
+:root {
+  /* Color */
+  --color-bg: #fbf6ea;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f2ead6;
+  --color-ink: #1b2a21;
+  --color-ink-muted: #4a5a50;
+  --color-primary: #1f5f3a;
+  --color-primary-ink: #ffffff;
+  --color-accent: #c23a22; /* deals and expiry urgency only */
+  --color-accent-ink: #ffffff;
+  --color-border: #d9cfb6;
+  --color-focus: #0b57d0;
+  --color-bright-bg: #ffffff;
+  --color-bright-ink: #000000;
+  --color-page: #e9e1cb; /* tablet gutter */
+
+  /* Type */
+  --font-sans: ui-rounded, 'SF Pro Rounded', 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-numeral: 3.25rem;
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+
+  /* Shape and size */
+  --radius: 16px;
+  --radius-sm: 10px;
+  --touch: 48px;
+  --tabbar-h: 64px;
+  --shadow: 0 2px 8px rgb(27 42 33 / 12%);
+  --column: 480px;
+}
