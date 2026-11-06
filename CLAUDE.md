@@ -29,6 +29,9 @@ Vue 3 + Vite, Vue Router, Pinia, VueUse (`useOnline`, `useStorage`, `useWakeLock
 ## Verify before you finish
 `npm run check` runs unit tests, the build, the browser audit (axe, 44px targets, overflow, console errors at 320/375/768, light and dark) and the end-to-end flows. Add an e2e step when you add a flow, and a unit test when you add logic to `src/utils/`.
 
+## Project commands
+`.claude/commands/`: `/check` (full verification), `/new-view` (add a view that meets the definition of done), `/end-session` (update the memory bank). `.claude/settings.json` pre-approves the read-only and verification commands; pushing is not pre-approved.
+
 ## Commits
 Small and descriptive, imperative mood (e.g. `Add offline queue for clipped offers`). No `update` or `fix` alone.
 

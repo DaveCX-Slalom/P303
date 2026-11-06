@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev)",
+      "Bash(npm run build)",
+      "Bash(npm test)",
+      "Bash(npm run check)",
+      "Bash(npm run audit)",
+      "Bash(npm run e2e)",
+      "Bash(node scripts/*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ]
+  }
+}

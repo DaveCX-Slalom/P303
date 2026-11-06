@@ -20,13 +20,13 @@
 - [x] Password protection waived by owner (exercise project, invented data only)
 - [x] Improvement round: checkout mode, shopping list, rewards and tier perks, inbox, dark mode, intro, brand, store map, history chart, install prompt
 - [x] Tests: 52 unit tests, browser audit (axe), 21 e2e flows
+- [x] `.claude/` folder: settings plus /check, /new-view and /end-session commands
 - [x] README with demo GIF, screenshots, architecture diagram; BRIEF.md synced ("As built")
 
 ## In progress
-- [ ] Push and redeploy the improvement round (Vercel redeploys from `main`)
 
 ## To do
-- [ ] Test on a real phone (manual)
+- Nothing outstanding. Real-phone test done by the owner.
 - [ ] Optional: real barcode symbology and a real notification backend (out of scope for the mock)
 
 ## Session log

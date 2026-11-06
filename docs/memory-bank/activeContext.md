@@ -3,12 +3,11 @@
 _Last updated: 2026-11-06 (Session 2)_
 
 ## Current focus
-The app is feature-complete for the brief and the improvement round. Remaining: push, confirm the Vercel redeploy, and try it on a real phone.
+The app is complete and deployed (https://protogen303.vercel.app/). The owner has tested it on a real phone. Ready to share.
 
 ## Next steps
-1. Push `main` and confirm https://protogen303.vercel.app/ shows the new build.
-2. Test on a real phone (install to home screen, offline code, brightness, swipe to clip, checkout mode).
-3. Optional polish: more stores' layouts, richer notifications, more rewards.
+1. Nothing required. Optional polish: more store layouts, richer notifications, more rewards.
+2. Use `/check` before any change ships, and `/end-session` to close a session.
 
 ## Open questions
 - None blocking.
