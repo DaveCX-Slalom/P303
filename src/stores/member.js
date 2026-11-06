@@ -2,11 +2,12 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { StorageSerializers, useStorage } from '@vueuse/core'
 import { api } from '../api/mock.js'
+import { rewardState as stateOf } from '../utils/rewards.js'
 
 export const useMemberStore = defineStore('member', () => {
   // The member code is cached so it works with no signal.
   const cached = useStorage('fm-member', null, undefined, { serializer: StorageSerializers.object })
-  const settings = useStorage('fm-settings', { preferredStoreId: 's-1', notifications: true })
+  const settings = useStorage('fm-settings', { preferredStoreId: 's-1', notifications: true, theme: 'system' }, undefined, { mergeDefaults: true })
 
   const member = ref(cached.value)
   const status = ref(cached.value ? 'ready' : 'loading') // loading | ready | error
@@ -72,8 +73,11 @@ export const useMemberStore = defineStore('member', () => {
     nextTier.value ? Math.max(0, nextTier.value.from - member.value.yearPoints) : 0
   )
 
+  const rewardState = (reward) =>
+    stateOf(reward, member.value?.points ?? 0, member.value?.tierId, member.value?.tiers ?? [])
+
   return {
     member, status, error, settings, transactions, historyStatus, historyError,
-    tier, nextTier, tierProgress, pointsToNextTier, load, loadHistory, redeem
+    tier, nextTier, tierProgress, pointsToNextTier, rewardState, load, loadHistory, redeem
   }
 })

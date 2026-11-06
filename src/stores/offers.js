@@ -4,8 +4,7 @@ import { useStorage } from '@vueuse/core'
 import { api } from '../api/mock.js'
 import { useConnectivityStore } from './connectivity.js'
 import { useMemberStore } from './member.js'
-
-const SOON_MS = 24 * 3600 * 1000
+import { availableAt, countdownLabel, filterOffers, isExpired, isSoon as soon, rankOffers, sortOffers } from '../utils/offers.js'
 
 export const useOffersStore = defineStore('offers', () => {
   const connectivity = useConnectivityStore()
@@ -15,11 +14,18 @@ export const useOffersStore = defineStore('offers', () => {
   const stores = ref([])
   const status = ref('loading') // loading | ready | error
   const error = ref('')
+  const loadedOnce = ref(false)
   const now = ref(Date.now())
   setInterval(() => (now.value = Date.now()), 30000)
 
   const clippedIds = useStorage('fm-clipped', [])
   const queue = useStorage('fm-queue', []) // [{ id, clipped }] waiting to sync
+
+  // Browse controls (kept here so they survive switching tabs)
+  const query = ref('')
+  const section = ref('')
+  const soonOnly = ref(false)
+  const sort = ref('best') // best | ending | az
 
   async function load() {
     status.value = 'loading'
@@ -28,32 +34,48 @@ export const useOffersStore = defineStore('offers', () => {
       offers.value = o
       stores.value = s
       status.value = 'ready'
+      loadedOnce.value = true
     } catch (e) {
       status.value = 'error'
       error.value = e.message
     }
   }
 
+  // Load once; views call this on mount so deep links and tab switches both work.
+  function ensure() {
+    if (!loadedOnce.value && status.value !== 'error') return load()
+    if (status.value === 'error') return load()
+  }
+
   const currentStore = computed(
     () => stores.value.find((s) => s.id === memberStore.settings.preferredStoreId) || stores.value[0]
   )
+  const storeId = computed(() => currentStore.value?.id)
 
-  const inStore = (o) => o.stores === 'all' || o.stores.includes(currentStore.value?.id)
-
-  // Active offers for this store: store-specific first, then chain-wide, soonest expiry first.
-  const active = computed(() =>
-    offers.value
-      .filter((o) => o.expiresAt > now.value && inStore(o))
-      .sort((a, b) => {
-        const specific = Number(b.stores !== 'all') - Number(a.stores !== 'all')
-        return specific || a.expiresAt - b.expiresAt
-      })
-  )
+  const active = computed(() => rankOffers(offers.value, storeId.value, now.value))
   const clipped = computed(() => active.value.filter((o) => clippedIds.value.includes(o.id)))
-  const expired = computed(() => offers.value.filter((o) => o.expiresAt <= now.value && inStore(o)))
+  const expired = computed(() => offers.value.filter((o) => isExpired(o, now.value) && availableAt(o, storeId.value)))
+  const sections = computed(() => [...new Set(active.value.map((o) => o.aisle))].sort())
+  const bestOffer = computed(() => active.value.find((o) => !clippedIds.value.includes(o.id)) || null)
+  const clippedBySection = computed(() => {
+    const counts = {}
+    for (const o of clipped.value) counts[o.aisle] = (counts[o.aisle] || 0) + 1
+    return counts
+  })
+
+  const filtersActive = computed(() => !!(query.value.trim() || section.value || soonOnly.value))
+  function clearFilters() {
+    query.value = ''
+    section.value = ''
+    soonOnly.value = false
+  }
+  const browse = (base) =>
+    sortOffers(filterOffers(base, { query: query.value, section: section.value, soonOnly: soonOnly.value }, now.value), sort.value)
 
   const isClipped = (id) => clippedIds.value.includes(id)
-  const isSoon = (o) => o.expiresAt - now.value < SOON_MS
+  const isSoon = (o) => soon(o, now.value)
+  const countdown = (o) => countdownLabel(o, now.value)
+  const offerById = (id) => offers.value.find((o) => o.id === id)
 
   function toggleClip(id) {
     const next = !isClipped(id)
@@ -80,18 +102,9 @@ export const useOffersStore = defineStore('offers', () => {
 
   watch(() => connectivity.online, (isOnline) => isOnline && flushQueue())
 
-  function countdown(o) {
-    const ms = o.expiresAt - now.value
-    if (ms <= 0) return 'Expired'
-    const h = Math.floor(ms / 3600000)
-    const m = Math.floor((ms % 3600000) / 60000)
-    if (h >= 48) return `${Math.floor(h / 24)} days left`
-    if (h >= 1) return `${h}h ${m}m left`
-    return `${m}m left`
-  }
-
   return {
-    offers, stores, status, error, currentStore, active, clipped, expired, queue,
-    isClipped, isSoon, toggleClip, countdown, load, flushQueue
+    offers, stores, status, error, now, currentStore, storeId, active, clipped, expired, sections, bestOffer,
+    clippedBySection, queue, query, section, soonOnly, sort, filtersActive, clearFilters, browse,
+    isClipped, isSoon, countdown, offerById, toggleClip, load, ensure, flushQueue
   }
 })

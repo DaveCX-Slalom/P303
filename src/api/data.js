@@ -3,9 +3,9 @@ const HOUR = 3600 * 1000
 const DAY = 24 * HOUR
 
 export const tiers = [
-  { id: 'sprout', name: 'Sprout', from: 0 },
-  { id: 'harvest', name: 'Harvest', from: 1500 },
-  { id: 'orchard', name: 'Orchard', from: 4000 }
+  { id: 'sprout', name: 'Sprout', from: 0, perks: ['1 point per $1', 'Birthday treat', 'Weekly member offers'] },
+  { id: 'harvest', name: 'Harvest', from: 1500, perks: ['1.25 points per $1', 'Early access to new offers', 'Free curbside pickup', 'Birthday treat'] },
+  { id: 'orchard', name: 'Orchard', from: 4000, perks: ['1.5 points per $1', 'Monthly bonus offer', 'Priority pickup', 'Double points birthday week'] }
 ]
 
 export const member = {
@@ -51,8 +51,36 @@ const rawOffers = [
   { id: 'o-15', title: 'Free reusable bag at $30', aisle: 'Household', stores: 'all', expiresInHours: -40, reward: 'Free bag' }
 ]
 
+// What each offer actually applies to (used for search and the details sheet).
+const productsById = {
+  'o-1': ['Baby spinach', 'Honeycrisp apples', 'Lemons', 'Heirloom tomatoes'],
+  'o-2': ['Sourdough loaf'],
+  'o-3': ['Oat milk'],
+  'o-4': ['Greek yogurt', 'Vanilla yogurt', 'Yogurt cups'],
+  'o-5': ['Rotisserie chicken', 'Sliced turkey', 'Fresh mozzarella'],
+  'o-6': ['Wild blueberries', 'Mixed berries'],
+  'o-7': ['Penne pasta', 'Spaghetti', 'Fusilli'],
+  'o-8': ['Cold brew', 'Any pastry'],
+  'o-9': ['Dish soap'],
+  'o-10': ['Butter croissants', 'Seeded rolls', 'Cookies'],
+  'o-11': ['Rotisserie chicken'],
+  'o-12': ['Sparkling water'],
+  'o-13': ['All frozen aisle items'],
+  'o-14': ['Heirloom tomatoes'],
+  'o-15': ['Reusable bag']
+}
+
 export function buildOffers(now = Date.now()) {
-  return rawOffers.map(({ expiresInHours, ...o }) => ({ ...o, expiresAt: now + expiresInHours * HOUR }))
+  return rawOffers.map(({ expiresInHours, ...o }) => ({
+    ...o,
+    expiresAt: now + expiresInHours * HOUR,
+    products: productsById[o.id] || [],
+    terms: [
+      'Clip before checkout and scan your member code.',
+      'One redemption per member per visit.',
+      'Cannot be combined with other offers on the same item.'
+    ]
+  }))
 }
 
 // Seeded PRNG so the history is the same every run.
@@ -94,7 +122,12 @@ export function buildTransactions(now = Date.now()) {
 }
 
 export const rewards = [
-  { id: 'rw-1', label: 'Free coffee', cost: 300 },
-  { id: 'rw-2', label: '$5 off coupon', cost: 500 },
-  { id: 'rw-3', label: '$10 off coupon', cost: 900 }
+  { id: 'rw-1', label: 'Free coffee', cost: 300, category: 'Drinks', blurb: 'Any size from the in-store cafe.' },
+  { id: 'rw-2', label: '$5 off coupon', cost: 500, category: 'Savings', blurb: 'Off any shop of $25 or more.' },
+  { id: 'rw-3', label: '$10 off coupon', cost: 900, category: 'Savings', blurb: 'Off any shop of $50 or more.' },
+  { id: 'rw-4', label: 'Free bakery treat', cost: 400, category: 'Treats', blurb: 'Pick any pastry or cookie.' },
+  { id: 'rw-5', label: 'Reusable tote', cost: 650, category: 'Treats', blurb: 'The Fieldmarket organic cotton tote.' },
+  { id: 'rw-6', label: 'Free rotisserie chicken', cost: 1200, category: 'Savings', blurb: 'One whole chicken from the deli.' },
+  { id: 'rw-7', label: '$25 off coupon', cost: 2200, category: 'Savings', blurb: 'Off any shop of $100 or more.' },
+  { id: 'rw-8', label: 'Orchard-only market box', cost: 3500, category: 'Treats', blurb: 'Seasonal produce box.', minTier: 'orchard' }
 ]
