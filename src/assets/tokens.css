@@ -40,3 +40,51 @@
   --shadow: 0 2px 8px rgb(27 42 33 / 12%);
   --column: 480px;
 }
+
+/* Dark theme. Applies with the system setting unless the member forces light,
+   or always when the member forces dark (data-theme on <html>). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-bg: #101a14;
+    --color-surface: #18261d;
+    --color-surface-alt: #213227;
+    --color-ink: #f1ecdc;
+    --color-ink-muted: #b9c6bc;
+    --color-primary: #62c18a;
+    --color-primary-ink: #08170e;
+    --color-accent: #ff8a6e;
+    --color-accent-ink: #2a0d06;
+    --color-border: #2f4538;
+    --color-focus: #8ab4ff;
+    --color-page: #0a120d;
+    --shadow: 0 2px 8px rgb(0 0 0 / 45%);
+  }
+}
+
+:root[data-theme='dark'] {
+  --color-bg: #101a14;
+  --color-surface: #18261d;
+  --color-surface-alt: #213227;
+  --color-ink: #f1ecdc;
+  --color-ink-muted: #b9c6bc;
+  --color-primary: #62c18a;
+  --color-primary-ink: #08170e;
+  --color-accent: #ff8a6e;
+  --color-accent-ink: #2a0d06;
+  --color-border: #2f4538;
+  --color-focus: #8ab4ff;
+  --color-page: #0a120d;
+  --shadow: 0 2px 8px rgb(0 0 0 / 45%);
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}

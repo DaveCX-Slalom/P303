@@ -120,6 +120,11 @@ button {
   flex: 1;
 }
 
+.sticky-action .btn {
+  padding-inline: var(--space-3);
+  white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;

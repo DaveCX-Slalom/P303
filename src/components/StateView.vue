@@ -1,8 +1,10 @@
 <script setup>
+import ArtIllustration from './ArtIllustration.vue'
 // One place for the four states every view needs: loading, empty, error, ready (slot).
 // Offline is handled globally by OfflineBanner plus cached data in the stores.
 defineProps({
   state: { type: String, required: true }, // loading | empty | error | ready
+  art: { type: String, default: 'offers' },
   emptyTitle: { type: String, default: 'Nothing here yet' },
   emptyText: { type: String, default: '' },
   errorText: { type: String, default: 'Something went wrong.' }
@@ -19,12 +21,14 @@ defineEmits(['retry'])
   </div>
 
   <div v-else-if="state === 'error'" class="state state--msg card" role="alert">
+    <ArtIllustration name="error" />
     <h2>Can't load this right now</h2>
     <p>{{ errorText }}</p>
     <button class="btn" @click="$emit('retry')">Try again</button>
   </div>
 
   <div v-else-if="state === 'empty'" class="state state--msg card">
+    <ArtIllustration :name="art" />
     <h2>{{ emptyTitle }}</h2>
     <p v-if="emptyText">{{ emptyText }}</p>
     <slot name="empty" />
