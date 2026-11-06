@@ -2,7 +2,7 @@
 
 A mobile-first web app for in-store loyalty members: show the member code, surface the best offers, and check points in under 10 seconds, one-handed.
 
-**Live site:** _add Vercel URL here_ (password-protected). Best viewed on a phone.
+**Live site:** https://protogen303.vercel.app/ (password protection: see note in docs/memory-bank/activeContext.md). Best viewed on a phone.
 
 ## What it does
 - **Pocket:** scannable member code, points, tier progress (works offline)

@@ -21,7 +21,8 @@
 - [x] PWA manifest and service worker
 - [ ] Test on a real phone (manual)
 - [x] docs/user-flows.md and docs/design-tokens.md
-- [ ] Deploy with password protection (manual: Netlify/Vercel account needed)
+- [x] Deployed to Vercel: https://protogen303.vercel.app/
+- [ ] Turn on password protection (the site answers publicly right now)
 - [ ] Sync BRIEF.md and docs with final build
 
 ## Session log
