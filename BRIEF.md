@@ -87,3 +87,28 @@ Primary actions sit in the bottom 40% of the screen. No hamburger menus.
 - [ ] Descriptive commits across multiple sessions
 - [ ] Design reads as retail loyalty, one-handed, glanceable
 - [ ] BRIEF.md matches the shipped build
+
+## 11. As built (updated 2026-11-06)
+The five core flows are built, plus additions beyond the original brief. Where the build differs from sections 1 to 10, this section wins.
+
+**Deployed:** https://protogen303.vercel.app/ (public; password protection waived because this is an exercise with invented data).
+
+**Core flows, as shipped**
+- Pocket, Offers, Stores, History as specified, plus Settings-lite reached from the gear on Pocket (not a fifth tab).
+- Brightness mode, expiry flags (under 24h), expired offers moved out of the main list, offline code, queued clips, offline banner, empty and error states, PWA manifest and service worker, 320/375/768px layouts: all built.
+- Aisle map: shipped as both a floor-plan SVG and a text section list (the list is the accessible equivalent).
+- Redeem confirms in a bottom sheet.
+
+**Additions beyond the brief**
+- "Best offer right now" card on Pocket and a full-screen **Checkout mode** (wake lock, always high contrast).
+- Offer **search, section filter, ending-soon filter, sort**, and an offer **details sheet** (products, stores, terms).
+- **Shopping list** ordered by the store's section walk.
+- **Store floor-plan map** that highlights sections with clipped offers.
+- **History chart** (earned vs. redeemed), filters and transaction details; **Rewards** page with tier perks and catalog.
+- **Inbox** with derived reminders and optional device alerts.
+- **Dark mode** (system or manual), first-run intro, logo and illustrated empty states, count-up and clip animations, confetti on redeem (all honouring reduced motion), install prompt and app shortcuts.
+
+**Quality**
+- 52 unit tests (including AA contrast for both themes), a real-Chrome audit (axe WCAG 2.1 AA, 44px targets, overflow, console errors at 320/375/768px in light and dark) and 21 end-to-end flows. `npm run check` runs everything.
+
+**Still manual:** testing on a physical phone.
