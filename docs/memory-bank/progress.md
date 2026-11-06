@@ -22,7 +22,7 @@
 - [ ] Test on a real phone (manual)
 - [x] docs/user-flows.md and docs/design-tokens.md
 - [x] Deployed to Vercel: https://protogen303.vercel.app/
-- [ ] Turn on password protection (the site answers publicly right now)
+- [x] Password protection waived by owner (exercise project, invented data only)
 - [ ] Sync BRIEF.md and docs with final build
 
 ## Session log

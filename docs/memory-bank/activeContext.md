@@ -8,7 +8,7 @@ App is built end to end (all 4 views plus Settings). Now: verify in a browser an
 ## Next steps
 1. Run `npm run dev` and check every view at 320/375/768px, at 200% text, offline (DevTools), and with `?mock=error` / `?mock=empty`.
 2. Fix anything the check turns up (contrast, touch targets, layout).
-3. Turn on password protection for the Vercel deploy (https://protogen303.vercel.app/ is currently public) and test on a real phone.
+3. Test the Vercel deploy (https://protogen303.vercel.app/) on a real phone. Password protection was waived: exercise project with invented data.
 4. Sync BRIEF.md and docs with the final build.
 
 ## Open questions

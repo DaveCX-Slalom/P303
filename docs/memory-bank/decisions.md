@@ -13,3 +13,4 @@
 | 9 | 2026-11-06 | Settings reached from a gear on Pocket, not a fifth tab | Keeps the four-tab bar from the brief | Fifth tab |
 | 10 | 2026-11-06 | Single accent `#c23a22` instead of a brighter tomato | Passes AA contrast as text on cream | Brighter tomato (fails AA for small text) |
 | 11 | 2026-11-06 | Demo error/empty states via `?mock=` URL param | Lets reviewers see every state without code changes | Hidden dev panel |
+| 12 | 2026-11-06 | Deploy stays public, no password | Exercise project, invented data only (owner's call) | Vercel password protection |
