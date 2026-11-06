@@ -1,15 +1,14 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import StateView from '../components/StateView.vue'
+import StoreMap from '../components/StoreMap.vue'
 import { useOffersStore } from '../stores/offers.js'
 import { useMemberStore } from '../stores/member.js'
 
 const store = useOffersStore()
 const member = useMemberStore()
 
-onMounted(() => {
-  if (store.status !== 'ready') store.load()
-})
+onMounted(() => store.ensure())
 
 const state = computed(() => {
   if (store.status !== 'ready') return store.status
@@ -19,7 +18,7 @@ const state = computed(() => {
 const sorted = computed(() => [...store.stores].sort((a, b) => a.distanceKm - b.distanceKm))
 const selectedId = computed(() => member.settings.preferredStoreId)
 
-// Clipped offers grouped by aisle section for the selected store (a section list, not a map).
+// Clipped offers grouped by section: the text version of the map.
 const bySection = computed(() => {
   const groups = {}
   for (const o of store.clipped) (groups[o.aisle] ||= []).push(o)
@@ -38,7 +37,19 @@ function choose(id) {
   <section class="view">
     <h1>Stores</h1>
 
-    <StateView :state="state" empty-title="No stores found" empty-text="We couldn't find any stores near you." :error-text="store.error" @retry="store.load">
+    <StateView :state="state" art="stores" empty-title="No stores found" empty-text="We couldn't find any stores near you." :error-text="store.error" @retry="store.load">
+      <section v-if="store.currentStore" class="inside card" aria-labelledby="inside-h">
+        <h2 id="inside-h">Inside {{ store.currentStore.name.replace('Fieldmarket ', '') }}</h2>
+        <StoreMap :sections="store.currentStore.sections" :highlights="store.clippedBySection" />
+        <p v-if="!bySection.length" class="meta">Clip an offer and its section lights up on the map.</p>
+        <dl v-else>
+          <template v-for="[aisle, items] in bySection" :key="aisle">
+            <dt>{{ aisle }}</dt>
+            <dd v-for="o in items" :key="o.id">{{ o.title }}</dd>
+          </template>
+        </dl>
+      </section>
+
       <ul class="list">
         <li v-for="s in sorted" :key="s.id" class="store card" :class="{ 'is-selected': s.id === selectedId }">
           <div>
@@ -51,18 +62,6 @@ function choose(id) {
           </button>
         </li>
       </ul>
-
-      <section v-if="store.currentStore" class="aisles card">
-        <h2>Your clipped offers by section</h2>
-        <p v-if="!bySection.length" class="meta">Nothing clipped for {{ store.currentStore.name }} yet.</p>
-        <dl v-else>
-          <template v-for="[aisle, items] in bySection" :key="aisle">
-            <dt>{{ aisle }}</dt>
-            <dd v-for="o in items" :key="o.id">{{ o.title }}</dd>
-          </template>
-        </dl>
-        <p class="meta">All sections here: {{ store.currentStore.sections.join(', ') }}</p>
-      </section>
     </StateView>
 
     <div class="sticky-action">
@@ -97,11 +96,15 @@ function choose(id) {
   font-size: var(--text-sm);
 }
 
-.aisles {
+.inside {
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
+}
+
+dl {
+  margin: 0;
 }
 
 dt {
